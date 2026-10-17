@@ -1,0 +1,15 @@
+syntax = "proto3";
+package nutanixspecs;
+
+option go_package = "github.com/xerxist/omni-nutanix-pc-infra-provider/api/specs";
+
+// MachineSpec is stored in Omni in the infra provisioner state.
+message MachineSpec {
+  reserved 1, 2, 5, 8;
+  reserved "schematic", "talos_version", "cluster_uuid", "disk_uuids";
+
+  string image_uuid         = 3;
+  string vm_uuid            = 4;
+  string create_task_uuid   = 6;
+  string power_on_task_uuid = 7;
+}

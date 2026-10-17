@@ -1,0 +1,69 @@
+# Render with scripts/render-deployment.py. No credential values here.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${PROVIDER_DEPLOYMENT_NAME}
+  namespace: ${PROVIDER_NAMESPACE}
+  labels:
+    app.kubernetes.io/name: ${PROVIDER_DEPLOYMENT_NAME}
+spec:
+  # Mandatory: the migration admission guard is process-local, not distributed.
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ${PROVIDER_DEPLOYMENT_NAME}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ${PROVIDER_DEPLOYMENT_NAME}
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: ${PROVIDER_TERMINATION_GRACE_SECONDS}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: provider
+          image: ${PROVIDER_IMAGE}
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: ${PROVIDER_CONFIGMAP_NAME}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests:
+              cpu: ${PROVIDER_CPU_REQUEST}
+              memory: ${PROVIDER_MEMORY_REQUEST}
+            limits:
+              cpu: ${PROVIDER_CPU_LIMIT}
+              memory: ${PROVIDER_MEMORY_LIMIT}
+          volumeMounts:
+            - name: credentials
+              mountPath: /run/secrets
+              readOnly: true
+            - name: public-ca
+              mountPath: /etc/provider/certs
+              readOnly: true
+            - name: temporary
+              mountPath: /tmp
+      volumes:
+        - name: credentials
+          secret:
+            secretName: ${PROVIDER_CREDENTIAL_SECRET_NAME}
+            defaultMode: 0440
+        - name: public-ca
+          configMap:
+            name: ${PROVIDER_CA_CONFIGMAP_NAME}
+        - name: temporary
+          emptyDir:
+            sizeLimit: ${PROVIDER_TMP_SIZE_LIMIT}

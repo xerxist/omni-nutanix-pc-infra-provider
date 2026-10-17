@@ -1,0 +1,19 @@
+# Omni cluster template: render all placeholders before applying it.
+kind: Cluster
+name: ${CLUSTER_NAME}
+kubernetes:
+  version: ${KUBERNETES_VERSION}
+talos:
+  version: ${TALOS_VERSION}
+features:
+  diskEncryption: false
+---
+kind: ControlPlane
+machineClass:
+   name: ${MACHINE_CLASS_NAME}
+   size: ${CONTROL_PLANE_COUNT}
+---
+kind: Workers
+machineClass:
+   name: ${MACHINE_CLASS_NAME}
+   size: ${WORKER_COUNT}

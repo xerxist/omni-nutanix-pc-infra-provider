@@ -1,0 +1,42 @@
+# Run a previously built image only. This file never implicitly builds an image.
+services:
+  provider:
+    image: ${PROVIDER_IMAGE:?Set PROVIDER_IMAGE to your reviewed image tag or digest}
+    restart: unless-stopped
+    read_only: true
+    user: "65532:65532"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    stop_grace_period: ${PROVIDER_STOP_GRACE_PERIOD:-150s}
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=64m,mode=1777"]
+    environment:
+      PROVIDER_ID: ${PROVIDER_ID:-nutanix-pc}
+      PROVIDER_NAME: ${PROVIDER_NAME:-Nutanix Prism Central}
+      PROVIDER_DESCRIPTION: ${PROVIDER_DESCRIPTION:-Nutanix infrastructure provider}
+      PROVIDER_REGISTRATION_ONLY: ${PROVIDER_REGISTRATION_ONLY:-false}
+      OMNI_ENDPOINT: ${OMNI_ENDPOINT:?Set OMNI_ENDPOINT}
+      OMNI_SERVICE_ACCOUNT_KEY_FILE: ${OMNI_SERVICE_ACCOUNT_KEY_FILE:-/run/secrets/omni-service-account-key}
+      OMNI_INSECURE_SKIP_VERIFY: ${OMNI_INSECURE_SKIP_VERIFY:-false}
+      NUTANIX_ENDPOINT: ${NUTANIX_ENDPOINT:?Set NUTANIX_ENDPOINT}
+      NUTANIX_API_KEY_FILE: ${NUTANIX_API_KEY_FILE:-}
+      NUTANIX_USERNAME_FILE: ${NUTANIX_USERNAME_FILE:-}
+      NUTANIX_PASSWORD_FILE: ${NUTANIX_PASSWORD_FILE:-}
+      NUTANIX_CA_FILE: ${NUTANIX_CA_FILE:-}
+      TALOS_GUEST_CA_FILE: ${TALOS_GUEST_CA_FILE:-}
+      IMAGE_IMPORT_ENABLED: ${IMAGE_IMPORT_ENABLED:-false}
+      IMAGE_FACTORY_ENDPOINT: ${IMAGE_FACTORY_ENDPOINT:-https://factory.talos.dev}
+      IMAGE_FACTORY_CA_FILE: ${IMAGE_FACTORY_CA_FILE:-}
+      NUTANIX_INSECURE_SKIP_VERIFY: ${NUTANIX_INSECURE_SKIP_VERIFY:-false}
+      NUTANIX_VMM_VERSION: ${NUTANIX_VMM_VERSION:-v4.0}
+      NUTANIX_NETWORKING_VERSION: ${NUTANIX_NETWORKING_VERSION:-v4.0}
+      NUTANIX_CLUSTER_VERSION: ${NUTANIX_CLUSTER_VERSION:-v4.0}
+      NUTANIX_PRISM_VERSION: ${NUTANIX_PRISM_VERSION:-v4.0}
+    volumes:
+      - type: bind
+        source: ${PROVIDER_SECRETS_DIR:?Set PROVIDER_SECRETS_DIR to a private directory}
+        target: /run/secrets
+        read_only: true
+      - type: bind
+        source: ${PROVIDER_CERTS_DIR:?Set PROVIDER_CERTS_DIR to a public CA directory}
+        target: /etc/provider/certs
+        read_only: true

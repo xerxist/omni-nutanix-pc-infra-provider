@@ -1,0 +1,45 @@
+metadata:
+  namespace: default
+  type: MachineClasses.omni.sidero.dev
+  id: nutanix-pc-default
+spec:
+  autoprovision:
+    providerid: nutanix-pc
+    grpctunnel: 1 # Enabled; requires HTTPS SideroLink tunneling on Omni.
+    providerdata: |
+      description: "Omni-managed Talos node"
+      cpu: 2
+      cores: 4
+      memory_mb: 8192
+      disk_gb: 40
+      cluster_name: example-cluster
+      # Prefer *_uuid selectors for stable placement, especially with duplicate names.
+      container_name: example-storage
+      # VLAN/basic network, optionally protected by Flow Network Security.
+      # No VPC selector is needed for VLAN-backed guests.
+      subnet_name: example-vlan
+      image_name: example-talos-openstack-image
+      # For automatic imports, remove image_name/image_uuid and enable both the
+      # provider runtime IMAGE_IMPORT_ENABLED and this class's image_import.
+      # image_import: true
+      # initial_extensions:
+      #   - siderolabs/util-linux-tools # Names only; no version/tag/digest.
+      #   - siderolabs/qemu-guest-agent
+      # These category definitions must already exist in Prism Central.
+      # They may select Flow policies: verify bootstrap and cluster traffic rules.
+      categories:
+        - key: AppType
+          value: Kubernetes
+        - key: Environment
+          value: Production
+      # A UUID selector is also supported:
+      #   - uuid: 66666666-6666-4666-8666-666666666666
+      # additional_disks:
+      #   - size: 100
+      # additional_nics:
+      #   # No VPC selector means an independently selected VLAN subnet.
+      #   - subnet_name: storage-vlan
+      # Optional: exact PC physical GPU/vGPU names, one entry per GPU.
+      # gpu:
+      #   - "RTX 6000 Pro"
+      #   - "RTX 6000 Pro" # Requests a second GPU, not a duplicate to ignore.

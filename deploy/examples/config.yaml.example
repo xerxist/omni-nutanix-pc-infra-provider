@@ -1,0 +1,20 @@
+# Provider configuration. Supply endpoints and mounted credential paths privately.
+nutanix:
+  endpoint: "" # Required: supply via this field or NUTANIX_ENDPOINT.
+  # Prefer mounted secrets: NUTANIX_API_KEY_FILE, or the paired
+  # NUTANIX_USERNAME_FILE/NUTANIX_PASSWORD_FILE environment variables.
+  insecureSkipVerify: false
+  # caFile: /certs/prism-central-ca.pem
+  vmmVersion: v4.0
+  networkingVersion: v4.0
+  clusterVersion: v4.0
+  prismVersion: v4.0
+# Optional public CA bundle for Talos-to-Omni HTTPS (not PC trust).
+# guest:
+#   caFile: /certs/guest-ca.pem
+# Provider-wide gate, disabled by default. MachineClass image_import: true
+# imports only onto the selected VM cluster; there is no image destination list.
+# imageImport:
+#   enabled: true
+#   factoryEndpoint: https://factory.talos.dev
+#   caFile: /certs/image-factory-ca.pem

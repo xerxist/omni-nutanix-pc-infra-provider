@@ -1,0 +1,112 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "description": {"type": "string", "maxLength": 2048, "description": "Optional literal VM description shown in Prism. Supports multiline text; frozen at creation intent. Changes apply only to new machines, not existing VMs. Provider limit: 2048 characters."},
+    "cpu": {"type": "integer", "minimum": 1, "description": "vCPU sockets. Total vCPUs = cpu * cores."},
+    "cores": {"type": "integer", "minimum": 1, "description": "Cores per socket."},
+    "memory_mb": {"type": "integer", "minimum": 512, "description": "Memory in MiB."},
+    "disk_gb": {"type": "integer", "minimum": 5, "description": "Boot disk in GiB; must be at least the Talos image size."},
+    "cluster_name": {"type": "string", "minLength": 1, "description": "Target AHV cluster registered with Prism Central."},
+    "cluster_uuid": {"type": "string", "format": "uuid", "description": "Target AHV cluster extId. Preferred over names."},
+    "container_name": {"type": "string", "minLength": 1, "description": "Storage container name, scoped to the selected cluster."},
+    "container_uuid": {"type": "string", "format": "uuid", "description": "Storage container UUID on the selected cluster."},
+    "subnet_name": {"type": "string", "minLength": 1, "description": "VLAN or overlay subnet. VLAN names are cluster-scoped; overlay names can be VPC-scoped."},
+    "subnet_uuid": {"type": "string", "format": "uuid", "description": "Prism Central subnet extId; recommended for advanced networking."},
+    "vpc_name": {"type": "string", "minLength": 1, "description": "VPC scope for the primary overlay subnet."},
+    "vpc_uuid": {"type": "string", "format": "uuid", "description": "VPC extId for the primary overlay subnet."},
+    "image_name": {"type": "string", "description": "Existing Talos OpenStack-platform disk image. Leave blank when automatic image import is enabled."},
+    "image_uuid": {"type": "string", "pattern": "^$|^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$", "description": "Existing Prism Central DISK_IMAGE extId. Leave blank when automatic image import is enabled."},
+    "image_import": {"type": "boolean", "default": false, "title": "Automatic image import", "description": "Import the requested Talos version/extensions onto the VM's selected AHV cluster only. Requires provider enablement. Clear image_name and image_uuid when checked. No separate image destination selector, image updates or automatic deletion."},
+    "initial_extensions": {
+      "type": "array",
+      "title": "Initial Talos extensions",
+      "maxItems": 256,
+      "description": "Optional official extension names, for example siderolabs/qemu-guest-agent. Requires Automatic image import. Added to Omni's requested extensions, sorted and deduplicated (maximum 256 combined). Included only when freezing a new Talos image plan; editing this list does not update existing machines or frozen plans. Omni manages later extension upgrades separately.",
+      "items": {"type": "string", "minLength": 12, "maxLength": 128, "pattern": "^siderolabs/[a-z0-9][a-z0-9-]*$", "not": {"pattern": "[^a-z0-9/-]"}}
+    },
+    "categories": {
+      "type": "array",
+      "maxItems": 256,
+      "description": "Existing Prism Central VM categories assigned at creation. Select by uuid or key/value. May activate existing Flow security policies; definitions/policies are not created or updated.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "properties": {
+          "uuid": {"type": "string", "format": "uuid", "description": "Category extId."},
+          "key": {"type": "string", "minLength": 1},
+          "value": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "additional_disks": {
+      "type": "array",
+      "maxItems": 1023,
+      "description": "Ephemeral raw disks. Like the boot disk and config drive, any mismatched disks are automatically migrated to container_name/container_uuid before power-on. Deleted with the VM; not preserved on replacement.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "properties": {"size": {"type": "integer", "minimum": 1, "description": "Size in GiB."}},
+        "required": ["size"]
+      }
+    },
+    "gpu": {
+      "type": "array",
+      "maxItems": 16,
+      "description": "Exact physical GPU or vGPU device/profile names in the selected cluster. One name per GPU; repeat a name to request identical GPUs. IDs, vendor and mode are resolved internally and frozen before creation. PC/AHV enforce capacity and placement. Talos GPU extensions/drivers and Kubernetes device plugins are configured separately.",
+      "items": {
+        "type": "string", "minLength": 1, "maxLength": 128,
+        "pattern": "[^\u0000-\u0020\u007f-\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]",
+        "not": {"pattern": "[\u0000-\u001f\u007f-\u009f]"}
+      }
+    },
+    "additional_nics": {
+      "type": "array",
+      "description": "Additional NICs with independent subnet and VPC selectors.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "properties": {
+          "subnet_name": {"type": "string", "minLength": 1},
+          "subnet_uuid": {"type": "string", "format": "uuid"},
+          "vpc_name": {"type": "string", "minLength": 1},
+          "vpc_uuid": {"type": "string", "format": "uuid"}
+        }
+      }
+    }
+  },
+  "required": ["cpu", "cores", "memory_mb", "disk_gb"],
+  "allOf": [
+    {"anyOf": [{"required": ["cluster_name"]}, {"required": ["cluster_uuid"]}]},
+    {"anyOf": [{"required": ["subnet_name"]}, {"required": ["subnet_uuid"]}]},
+    {
+      "if": {"required": ["image_import"], "properties": {"image_import": {"const": true}}},
+      "then": {"properties": {"image_name": {"maxLength": 0}, "image_uuid": {"maxLength": 0}}},
+      "else": {"anyOf": [
+        {"required": ["image_name"], "properties": {"image_name": {"minLength": 1}}},
+        {"required": ["image_uuid"], "properties": {"image_uuid": {"minLength": 1}}}
+      ]}
+    },
+    {"if": {"required": ["image_uuid"], "properties": {"image_uuid": {"minLength": 1}}}, "then": {"properties": {"image_uuid": {"format": "uuid"}}}},
+    {"anyOf": [{"required": ["container_name"]}, {"required": ["container_uuid"]}]},
+    {
+      "if": {"required": ["initial_extensions"], "properties": {"initial_extensions": {"minItems": 1}}},
+      "then": {"required": ["image_import"], "properties": {"image_import": {"const": true}}}
+    },
+    {
+      "properties": {
+        "categories": {
+          "items": {
+            "anyOf": [{"required": ["uuid"]}, {"required": ["key", "value"]}],
+            "allOf": [
+              {"if": {"required": ["key"]}, "then": {"required": ["value"]}},
+              {"if": {"required": ["value"]}, "then": {"required": ["key"]}}
+            ]
+          }
+        },
+        "additional_nics": {
+          "items": {
+            "anyOf": [{"required": ["subnet_name"]}, {"required": ["subnet_uuid"]}]
+          }
+        }
+      }
+    }
+  ]
+}
