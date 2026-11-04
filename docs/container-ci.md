@@ -20,9 +20,11 @@ provider's platform.
 ## Pull and verify
 
 ```sh
-docker pull ghcr.io/xerxist/omni-nutanix-pc-infra-provider:v2.0.0
-docker run --rm ghcr.io/xerxist/omni-nutanix-pc-infra-provider:v2.0.0 --version
+docker pull ghcr.io/xerxist/omni-nutanix-pc-infra-provider:<release-tag>
+docker run --rm ghcr.io/xerxist/omni-nutanix-pc-infra-provider@sha256:<digest> --version
 ```
+
+`--version` prints the release tag without its `v`, for example `provider version 2.0.1`.
 
 Each release carries a signed SLSA build-provenance attestation. With the
 [GitHub CLI](https://cli.github.com/manual/gh_attestation_verify):
@@ -33,8 +35,9 @@ gh attestation verify \
   --repo xerxist/omni-nutanix-pc-infra-provider
 ```
 
-Tags are the release tag (for example `v2.0.1`) and `sha-<full-commit-sha>`. There are no `latest`/`main`
-aliases. A tag lookup is a convenience; record and deploy the digest.
+Image tags are the release tag (for example `v2.0.1`) and `sha-<full-commit-sha>`.
+There are no `latest`/`main` aliases. A tag lookup is a convenience; record and
+deploy the digest.
 
 ## Workflow
 

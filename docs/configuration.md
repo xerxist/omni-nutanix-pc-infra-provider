@@ -74,9 +74,9 @@ make build
 
 `make build` creates a static local executable in ignored `_out/`. Its version comes
 from `git describe` (`2.0.1` on a release tag, `2.0.1-3-gabc1234` after it, `dev`
-without tags); `provider --version` reports
-that metadata without credentials or network access. It does not build/push a
-container or deploy the provider. The executable accepts the same runtime settings.
+without tags); `provider --version` reports that metadata without credentials or
+network access. It does not build/push a container or deploy the provider. The
+executable accepts the same runtime settings.
 
 `make image IMAGE=<registry/owner/image:tag> BUILD_ARGS='<reviewed build arguments>'`
 is an explicit local container build, not a push/deployment. Pin builder/runtime
