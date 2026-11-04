@@ -1,5 +1,6 @@
 # Builds the provider image. Pull requests and main pushes only verify the build;
-# a vMAJOR.MINOR.PATCH tag matching VERSION publishes to GHCR and creates a release.
+# a vMAJOR.MINOR.PATCH tag on main publishes to GHCR and creates a release. The
+# version embedded in the binary is the tag without its leading "v".
 name: Release
 
 on:
@@ -33,9 +34,9 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Read VERSION
+      - name: Development version
         id: version
-        run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+        run: echo "version=dev-${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
 
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
@@ -91,18 +92,21 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Check tag matches VERSION
+      - name: Version from tag
         id: meta
         env:
+          GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
         run: |
-          version="$(cat VERSION)"
+          version="${TAG#v}"
           semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9a-z-]+(\.[0-9a-z-]+)*)?$'
-          if ! [[ "$version" =~ $semver ]]; then
-            echo "::error::VERSION must be lowercase MAJOR.MINOR.PATCH[-prerelease]"; exit 1
+          if [[ "$TAG" != v* ]] || ! [[ "$version" =~ $semver ]]; then
+            echo "::error::Release tags must be lowercase vMAJOR.MINOR.PATCH[-prerelease]"; exit 1
           fi
-          if [[ "$TAG" != "v${version}" ]]; then
-            echo "::error::Tag must be v${version} to match VERSION"; exit 1
+          # Only release commits that are already on main ("identical" or "behind").
+          status="$(gh api "repos/${GITHUB_REPOSITORY}/compare/main...${GITHUB_SHA}" --jq .status)"
+          if [[ "$status" != identical && "$status" != behind ]]; then
+            echo "::error::Tag ${TAG} must point to a commit on main"; exit 1
           fi
           {
             echo "version=${version}"

@@ -72,8 +72,9 @@ make build
 ./_out/omni-infra-provider-nutanix --help
 ```
 
-`make build` creates a static local executable in ignored `_out/`. It reads the
-repository's [`VERSION`](../VERSION) for build metadata; `provider --version` reports
+`make build` creates a static local executable in ignored `_out/`. Its version comes
+from `git describe` (`2.0.1` on a release tag, `2.0.1-3-gabc1234` after it, `dev`
+without tags); `provider --version` reports
 that metadata without credentials or network access. It does not build/push a
 container or deploy the provider. The executable accepts the same runtime settings.
 

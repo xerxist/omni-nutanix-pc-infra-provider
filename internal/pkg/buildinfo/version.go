@@ -5,6 +5,7 @@
 // Package buildinfo contains public metadata embedded at build time.
 package buildinfo
 
-// Version is set by CI and make builds to the repository's semantic VERSION.
+// Version is set at build time: CI uses the release tag without its leading "v",
+// make builds use git describe.
 // Unstamped local builds deliberately identify themselves as development builds.
 var Version = "dev"

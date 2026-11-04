@@ -3,7 +3,9 @@ GO ?= go
 CONTAINER_ENGINE ?= docker
 IMAGE ?=
 IMAGE_SOURCE ?=
-IMAGE_VERSION ?= $(shell cat VERSION)
+# Release tags are vMAJOR.MINOR.PATCH; untagged commits get git describe's suffix.
+GIT_VERSION := $(patsubst v%,%,$(shell git describe --tags --match 'v[0-9]*' 2>/dev/null))
+IMAGE_VERSION ?= $(or $(GIT_VERSION),dev)
 IMAGE_REVISION ?=
 BUILD_ARGS ?=
 PROTOC ?= protoc
