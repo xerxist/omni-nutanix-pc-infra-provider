@@ -13,7 +13,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.3
 	github.com/siderolabs/image-factory v1.7.2
-	github.com/siderolabs/omni/client v1.13.0
+	github.com/siderolabs/omni/client v1.13.1
 	github.com/siderolabs/talos/pkg/machinery v1.15.0-alpha.2.0.20261028085643-3ba3d6a5e784
 	github.com/spf13/cobra v1.10.2
 	go.uber.org/zap v1.28.0
