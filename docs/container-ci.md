@@ -91,6 +91,15 @@ select or upgrade the Talos version requested by Omni.
 Preserve UID/GID `65532:65532`, `/usr/local/bin/provider` and CA trust support in
 any replacement runtime image.
 
+## Dependency updates
+
+[Renovate](https://docs.renovatebot.com/) ([`renovate.json`](../renovate.json)) opens
+weekly PRs for Go modules, pinned actions and these builder/runtime digests, after a
+3-day minimum release age. The Go builder image and the Dockerfile `GO_VERSION` are
+grouped, as are the Omni/Talos/COSI modules. The `go` directive and `replace`
+directives are left for manual review. Each PR runs the verify job; nothing merges
+automatically.
+
 ## Local builds
 
 `make image IMAGE=<name:tag>` builds a single-platform image locally without

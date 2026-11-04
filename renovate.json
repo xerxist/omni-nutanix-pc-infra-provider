@@ -1,0 +1,64 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    "schedule:weekly"
+  ],
+  "timezone": "Europe/Amsterdam",
+  "labels": ["dependencies"],
+  "minimumReleaseAge": "3 days",
+  "osvVulnerabilityAlerts": true,
+  "postUpdateOptions": ["gomodTidy"],
+  "dockerfile": {
+    "description": "Dockerfile base images are ARG defaults; GO_VERSION is handled by the custom manager below.",
+    "enabled": false
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Digest-pinned builder/runtime images in the release workflow env",
+      "managerFilePatterns": ["/^\\.github/workflows/release\\.yml$/"],
+      "matchStrings": [
+        "(?:BUILD|RUNTIME)_IMAGE: (?<depName>[^\\s:@]+):(?<currentValue>[^\\s@]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Dockerfile default Go version for local builds",
+      "managerFilePatterns": ["/^Dockerfile$/"],
+      "matchStrings": ["ARG GO_VERSION=(?<currentValue>\\S+)"],
+      "depNameTemplate": "docker.io/library/golang",
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Replace directives deliberately mirror the upstream SDK's forks",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["replace"],
+      "enabled": false
+    },
+    {
+      "description": "Registries may not publish timestamps for digest updates",
+      "matchDatasources": ["docker"],
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
+    },
+    {
+      "description": "Keep the CI builder image and Dockerfile default on the same Go release",
+      "matchDepNames": ["docker.io/library/golang"],
+      "groupName": "Go toolchain"
+    },
+    {
+      "description": "Omni SDK, Talos machinery, Image Factory and COSI must stay compatible",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": ["github.com/siderolabs/**", "github.com/cosi-project/**"],
+      "groupName": "Omni and Talos SDK"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    }
+  ]
+}
