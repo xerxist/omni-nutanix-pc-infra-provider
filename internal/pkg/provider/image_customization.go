@@ -86,7 +86,13 @@ func (p *Provisioner) prepareImageSchematic(ctx context.Context, pctx provision.
 // explicit shared-image customizations. No unique token/UUID, join configuration,
 // alternate platform/bootloader or Secure Boot changes may enter a shared image.
 func normalizeSharedSchematic(s schematic.Schematic) (schematic.Schematic, error) {
-	if s.Customization.Bootloader != 0 || s.Customization.SecureBoot.IncludeWellKnownCertificates {
+	if s.Owner != "" || s.Customization.EmbeddedMachineConfiguration != "" {
+		return s, fmt.Errorf("automatic import requires a public shared schematic without embedded machine configuration")
+	}
+	if s.Customization.DiskImage.SectorSize != 0 {
+		return s, fmt.Errorf("automatic import does not support disk image customization")
+	}
+	if s.Customization.Bootloader != 0 || s.Customization.SecureBoot.IncludeWellKnownCertificates || s.Customization.SecureBoot.EnrollKeys != "" {
 		return s, fmt.Errorf("automatic import does not support bootloader or Secure Boot customization")
 	}
 	if len(s.Customization.ExtraKernelArgs) > 256 || len(s.Customization.Meta) > 256 || len(s.Customization.SystemExtensions.OfficialExtensions) > 256 {

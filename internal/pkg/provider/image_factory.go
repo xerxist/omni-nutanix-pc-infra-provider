@@ -23,17 +23,22 @@ import (
 	"time"
 
 	"github.com/siderolabs/image-factory/pkg/schematic"
-	"github.com/siderolabs/omni/client/pkg/infra/provision"
 )
 
 const defaultFactoryEndpoint = "https://factory.talos.dev"
 const maxFactoryImageBytes int64 = 8 << 30
 
+// JSON can escape each schematic byte into six bytes. Bound the normalized
+// response without truncating an otherwise valid 64KiB shared schematic.
+const maxFactorySchematicResponseBytes = 6*maxSharedSchematicBytes + 4096
+
 type ImageSource struct{ URL, SchematicID, SHA256 string }
 
 // ImageFactory never receives connection parameters, join config or credentials.
+// Keep this provider-owned contract independent of the SDK's installation media,
+// whose URLs may contain credentials or expire and cannot become frozen sources.
 type ImageFactory interface {
-	provision.FactoryClient
+	EnsureSchematic(context.Context, schematic.Schematic) (string, error)
 	Source(string, string) (ImageSource, error)
 	Checksum(context.Context, ImageSource) (string, error)
 }
@@ -111,12 +116,33 @@ func (f *httpImageFactory) EnsureSchematic(ctx context.Context, s schematic.Sche
 		return "", fmt.Errorf("Image Factory schematic request failed; details suppressed")
 	}
 	var result struct {
-		ID string `json:"id"`
+		ID        string `json:"id"`
+		Schematic string `json:"schematic"`
 	}
-	decodeErr := json.NewDecoder(io.LimitReader(resp.Body, 4096)).Decode(&result)
+	body, readErr := io.ReadAll(io.LimitReader(resp.Body, maxFactorySchematicResponseBytes+1))
 	resp.Body.Close()
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated || decodeErr != nil || result.ID != id {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated || readErr != nil ||
+		len(body) > maxFactorySchematicResponseBytes || json.Unmarshal(body, &result) != nil || result.ID != id {
 		return "", fmt.Errorf("Image Factory schematic response invalid (HTTP %d); details suppressed", resp.StatusCode)
+	}
+	// Older factories return only the ID. Newer factories also return the
+	// authoritative schematic: reject ownership, embedded config or any content
+	// change instead of accepting a different shared image or frozen identity.
+	if result.Schematic != "" {
+		if len(result.Schematic) > maxSharedSchematicBytes {
+			return "", fmt.Errorf("Image Factory normalized schematic exceeds 64 KiB; details suppressed")
+		}
+		normalized, err := schematic.Unmarshal([]byte(result.Schematic))
+		if err != nil {
+			return "", fmt.Errorf("Image Factory normalized schematic invalid; details suppressed")
+		}
+		if _, err := normalizeSharedSchematic(*normalized); err != nil {
+			return "", fmt.Errorf("Image Factory normalized schematic unsupported; details suppressed")
+		}
+		normalizedPayload, err := normalized.Marshal()
+		if err != nil || !bytes.Equal(normalizedPayload, payload) {
+			return "", fmt.Errorf("Image Factory changed the shared schematic; details suppressed")
+		}
 	}
 	return id, nil
 }

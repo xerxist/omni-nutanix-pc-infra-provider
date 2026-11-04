@@ -119,8 +119,8 @@ func (s *versionedRegistrationState) ModifyWithResult(ctx context.Context, empty
 func setRegistrationVersion(message protoreflect.Message, version string) error {
 	// Omni's official InfraProviderStatusSpec uses string field 5 for version:
 	// https://github.com/siderolabs/omni/blob/v1.12.4/client/api/omni/specs/infra.proto
-	// Our v1.7.1 SDK predates it. Use protobuf's forward-compatible unknown fields
-	// rather than upgrading the provisioning SDK for a display-only change.
+	// Use the declared field with newer SDKs, retaining protobuf's forward-compatible
+	// unknown-field path for older SDKs without changing the scoped state wrapper.
 	field := message.Descriptor().Fields().ByNumber(protoreflect.FieldNumber(providerVersionField))
 	if field != nil {
 		if field.Name() != "version" || field.Kind() != protoreflect.StringKind || field.IsList() {

@@ -1,11 +1,12 @@
 # syntax=docker/dockerfile:1
 # Preparation only: pin BUILD_IMAGE and RUNTIME_IMAGE to reviewed digests in CI.
-ARG GO_VERSION=1.26.2
+ARG GO_VERSION=1.27.3
 ARG BUILD_IMAGE=docker.io/golang:${GO_VERSION}-alpine
 ARG RUNTIME_IMAGE=gcr.io/distroless/static-debian12:nonroot
 ARG IMAGE_VERSION=dev
 
 FROM --platform=$BUILDPLATFORM ${BUILD_IMAGE} AS build
+ENV GOTOOLCHAIN=local
 WORKDIR /src
 COPY go.mod go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod go mod download && go mod verify

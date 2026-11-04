@@ -48,6 +48,17 @@ repository-scoped build runner. Under **Repository Settings → Actions → Vari
 Use a Go Alpine builder and distroless static non-root runtime with reviewed immutable
 digests. Preserve UID/GID `65532:65532`, `/usr/local/bin/provider` and CA trust support.
 
+The Dockerfile defaults to Go 1.27.3 and keeps `GOTOOLCHAIN=local`. Set `BUILD_IMAGE`
+to a compatible reviewed builder; an existing variable overrides the Dockerfile
+default and is not updated automatically. For example:
+
+```text
+docker.io/library/golang:1.27.3-alpine@sha256:d200d2dd76b03a99b52651fd1325aff7dcd35422c35c01bac56571b0507f3deb
+```
+
+The builder's Go version must meet the minimum in `go.mod`. This build toolchain
+does not select or upgrade the Talos version requested by Omni.
+
 Create a dedicated package-publishing account/token authorized under the repository
 owner, using the smallest supported package read/write scope (typically `write:package`).
 The Actions job token is not the package-publisher credential. Under **Actions → Secrets**:

@@ -142,7 +142,8 @@ var rootCmd = &cobra.Command{
 			if err := provisioner.ConfigureImageImport(st, factory); err != nil {
 				return err
 			}
-			runOptions = append(runOptions, infra.WithImageFactoryClient(factory))
+			// The provisioner uses its own validated factory and frozen sources,
+			// not the SDK's short-lived installation-media resolver.
 		}
 		ip, err := infra.NewProvider(meta.ProviderID, provisioner, providerConfig)
 		if err != nil {
