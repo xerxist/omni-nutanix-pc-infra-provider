@@ -22,4 +22,5 @@ before publication. Preserve private evidence; do not reset journals or force cl
 
 The upstream non-affiliation/support disclaimer applies. There is no guaranteed
 vendor support, security response time or long-term maintenance contract. A pinned
-image digest is not a provenance/signature attestation.
+image digest is not a provenance/signature attestation; verify release images with
+`gh attestation verify` as described in [container images](docs/container-ci.md).

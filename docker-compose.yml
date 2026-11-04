@@ -1,4 +1,5 @@
 # Run a previously built image only. This file never implicitly builds an image.
+# PROVIDER_IMAGE example: ghcr.io/xerxist/omni-nutanix-pc-infra-provider@sha256:<digest>
 services:
   provider:
     image: ${PROVIDER_IMAGE:?Set PROVIDER_IMAGE to your reviewed image tag or digest}

@@ -14,7 +14,7 @@ make build
 
 The local binary is written to ignored `_out/`; generated protobuf Go is checked in.
 See [configuration/source builds](docs/configuration.md#build-from-source) and
-[Gitea builds](docs/container-ci.md). Runtime credentials are not build arguments.
+[container releases](docs/container-ci.md). Runtime credentials are not build arguments.
 Container publication and deployment are separate from source changes.
 
 ## Implementation contracts

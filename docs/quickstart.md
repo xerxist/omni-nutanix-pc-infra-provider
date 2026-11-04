@@ -12,8 +12,10 @@ Omni. This repository does not install Omni, Prism, Kubernetes or authentication
 - Prepare a dedicated [Prism API-key or Basic identity](prism-permissions.md).
 - Ensure the provider can reach the Omni HTTPS API and Prism Central HTTPS origin.
   For Factory imports, both provider and PC need Factory/asset-host access and trust.
-- Select a provider image for the host architecture, pinned by registry digest;
-  use [Gitea builds](container-ci.md) or [a source build](configuration.md#build-from-source).
+- Select a provider image pinned by registry digest. Release images are published to
+  `ghcr.io/xerxist/omni-nutanix-pc-infra-provider` for amd64 and arm64; copy the digest
+  from the [release notes](https://github.com/xerxist/omni-nutanix-pc-infra-provider/releases).
+  See [container images](container-ci.md) or [a source build](configuration.md#build-from-source).
 
 ## 2. Create provider-bound Omni access
 
@@ -64,6 +66,12 @@ cp .env.example .env
 docker compose up -d
 ```
 
+Set `PROVIDER_IMAGE` to the digest from the release notes, for example:
+
+```dotenv
+PROVIDER_IMAGE=ghcr.io/xerxist/omni-nutanix-pc-infra-provider@sha256:<digest>
+```
+
 Populate the private secret files matching the configured container paths. The Compose
 example defaults to lowercase filenames; the Kubernetes example uses uppercase Secret
 keys. Follow the paths selected in your configuration. For Basic, clear
@@ -78,7 +86,8 @@ the complete populated `docker compose config` or environment.
 ```sh
 cp deploy/kubernetes/deployment.env.example deployment.env
 cp deploy/kubernetes/runtime.env.example runtime.env
-# Privately fill both ignored copies; use a reviewed digest-pinned image.
+# Privately fill both ignored copies; set PROVIDER_IMAGE to
+# ghcr.io/xerxist/omni-nutanix-pc-infra-provider@sha256:<digest>.
 python3 scripts/render-deployment.py --env-file deployment.env \
   --output deploy/rendered/deployment.yaml
 ```
@@ -90,7 +99,7 @@ Create the selected namespace, runtime ConfigMap, credential Secret and public-C
 ConfigMap using your cluster's approved configuration/secret tooling. Secret keys must
 match runtime file paths, for example `OMNI_SERVICE_ACCOUNT_KEY` and `NUTANIX_API_KEY`;
 Basic uses separate username/password keys. The CA ConfigMap can be empty with public
-endpoint roots. A private registry may need a read-only pull Secret in a local overlay.
+endpoint roots. A private registry or private GHCR package needs a read-only pull Secret in a local overlay.
 
 Review and apply the rendered Deployment. It uses one replica/Recreate, non-root
 execution, read-only root/mounts and dropped capabilities. Kubernetes API access is

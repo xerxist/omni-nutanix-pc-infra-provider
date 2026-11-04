@@ -23,7 +23,7 @@ through Omni. It does not use Prism Element APIs or adopt existing VMs.
 - Existing Prism categories, optional GPU profiles, extra disks and VM descriptions.
 - Prism IAM API-key or Basic authentication, mounted secrets and verified TLS.
 - Read-only Prism-backed health reporting through Omni.
-- Non-root Docker Compose/Kubernetes deployment and opt-in Gitea container builds.
+- Non-root Docker Compose/Kubernetes deployment with multi-arch release images on GHCR.
 
 Run **one active provider instance** with ID **`nutanix-pc`**. Kubernetes deployments
 must use **one replica and Recreate**; do not run Compose and Kubernetes concurrently
@@ -42,7 +42,7 @@ created/deleted as part of normal VM teardown.
 | [Prism permissions](docs/prism-permissions.md) | API-key/Basic setup and least-privilege operation/scope requirements. |
 | [Operations](docs/operations.md) | Provider updates, teardown, credential rotation and troubleshooting. |
 | [Provider health](docs/provider-health.md) | Reported signal, endpoint coverage and limits. |
-| [Gitea builds](docs/container-ci.md) | Runner, registry variables, credentials and publishing. |
+| [Container images and releases](docs/container-ci.md) | Pulling/verifying images and the GitHub release workflow. |
 
 Configuration examples are in [`deploy/examples/`](deploy/examples/). Docker Compose
 uses [`.env.example`](.env.example); Kubernetes uses templates under
@@ -63,8 +63,8 @@ approvals intact; uncertain operations must not be bypassed by erasing state.
 This project is an independent rewrite of
 [`ktijssen/omni-nutanix-infra-provider`](https://github.com/ktijssen/omni-nutanix-infra-provider).
 The Go module uses the
-[public repository](https://github.com/xerxist/omni-nutanix-pc-infra-provider); container builds
-remain configurable through Gitea. See
+[public repository](https://github.com/xerxist/omni-nutanix-pc-infra-provider); release images
+are published to `ghcr.io/xerxist/omni-nutanix-pc-infra-provider`. See
 [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
 License: [Mozilla Public License 2.0](LICENSE).

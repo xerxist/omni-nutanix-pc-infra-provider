@@ -1,125 +1,97 @@
-# Gitea container builds
+# Container images and releases
 
-The workflow [`.gitea/workflows/container.yml`](../.gitea/workflows/container.yml)
-compiles source and optionally builds/publishes to **Gitea's container registry**.
-Registry host/path derive from Gitea context unless explicitly overridden. It never
-deploys, connects to Prism/Omni or allocates machines.
+Release images are published to the **GitHub Container Registry**:
+
+```text
+ghcr.io/xerxist/omni-nutanix-pc-infra-provider
+```
+
+Each [GitHub release](https://github.com/xerxist/omni-nutanix-pc-infra-provider/releases)
+lists its image digest. Deploy **`image@sha256:<digest>`**, not a mutable tag:
+
+```text
+ghcr.io/xerxist/omni-nutanix-pc-infra-provider@sha256:<digest-from-release-notes>
+```
+
+Images are multi-arch (`linux/amd64`, `linux/arm64`); the runtime selects the
+matching platform. Automatic Talos image import remains amd64 regardless of the
+provider's platform.
+
+## Pull and verify
+
+```sh
+docker pull ghcr.io/xerxist/omni-nutanix-pc-infra-provider:v2.0.0
+docker run --rm ghcr.io/xerxist/omni-nutanix-pc-infra-provider:v2.0.0 --version
+```
+
+Each release carries a signed SLSA build-provenance attestation. With the
+[GitHub CLI](https://cli.github.com/manual/gh_attestation_verify):
+
+```sh
+gh attestation verify \
+  oci://ghcr.io/xerxist/omni-nutanix-pc-infra-provider@sha256:<digest> \
+  --repo xerxist/omni-nutanix-pc-infra-provider
+```
+
+Tags are `v<VERSION>` and `sha-<full-commit-sha>`. There are no `latest`/`main`
+aliases. A tag lookup is a convenience; record and deploy the digest.
 
 ## Workflow
 
-- Main/tag pushes, pull requests and manual runs compile source with Go selected from
-  `go.mod`.
-- Publishing requires successful compilation, `CONTAINER_PUBLISH_ENABLED=true`,
-  a trusted push/manual event and either `main` or a canonical release tag matching
-  the repository's `VERSION` file. Pull requests cannot publish.
-- The image is built with reviewed digest-pinned builder/runtime images for a single
-  native platform. Image identity, non-root user, entrypoint and platform are verified.
-- `provider --help` and `provider --version` verify executable packaging without
-  network, runtime credentials, writable root or elevated privileges. Build metadata
-  must match the frozen publication plan.
-- Only the publication step receives registry credentials. Isolated Docker auth uses
-  password-stdin and a temporary config removed on completion/failure. Tags must still
-  point to the verified image; the push reports an unambiguous registry digest.
+[`.github/workflows/release.yml`](../.github/workflows/release.yml) never deploys,
+connects to Prism/Omni or allocates machines.
 
-Use **`image@sha256:<digest>`** for deployment, not mutable tags. Main builds publish
-`<gitea-host>/<owner>/<image>:sha-<full-commit-sha>`; canonical `v` release tags additionally
-publish the matching release-tag alias. There are no `latest`/`main` image aliases.
+- Pull requests and `main` pushes build both platforms and smoke-test the amd64
+  image (`--help`, `--version`, non-root user) with no network or registry access.
+  Nothing is published.
+- A pushed tag `v<VERSION>` must equal `v` plus the repository's
+  [`VERSION`](../VERSION). The job repeats the smoke test, then pushes the
+  multi-arch image, attests its digest and creates a GitHub release with the
+  digest and generated notes. Versions containing `-` are marked as prereleases.
+- Publishing uses the job's short-lived `GITHUB_TOKEN`; no personal token or
+  repository secret is required. Each job receives only the permissions it needs.
+- Builder and runtime images and all actions are pinned by digest/commit SHA.
 
-`VERSION` is the single release/build metadata source. Optional Git release tags must
-be `v` plus that value; direct unstamped builds report `dev`. Changing source metadata
-does not update an existing deployed binary. Protect main/release tags and do not move
-release tags to different source. Multi-tag pushes are not atomic.
+## Cut a release
 
-## Configure Gitea
+1. Update [`VERSION`](../VERSION) (for example `2.0.1`) and merge to `main`.
+2. Tag that commit and push the tag:
 
-Enable instance/repository Actions and Packages/Container Registry. Register a trusted
-repository-scoped build runner. Under **Repository Settings → Actions → Variables**:
+   ```sh
+   git tag -a v2.0.1 -m v2.0.1
+   git push origin v2.0.1
+   ```
 
-| Variable | Value / behavior |
-| --- | --- |
-| `BUILD_RUNNER_LABEL` | Existing worker label; defaults to `container-builder`. |
-| `BUILD_IMAGE` | Required digest-pinned Go builder, satisfying `go.mod`. |
-| `RUNTIME_IMAGE` | Required digest-pinned static non-root runtime with public CA roots. |
-| `CONTAINER_PUBLISH_ENABLED` | Leave unset/false until publication is intended; enable with exactly `true`. |
-| `REGISTRY_HOST` | Optional hostname:port, without scheme/path; defaults to Gitea server host/port. |
-| `IMAGE_PATH` | Optional lowercase owner/image path under the repository owner; defaults to repository owner/name. |
-| `IMAGE_PLATFORM` | `linux/amd64` by default, or `linux/arm64` on a native matching daemon. Automatic Talos image import remains amd64. |
+3. Follow **Actions → Release**. The release page lists the digest to deploy.
 
-Use a Go Alpine builder and distroless static non-root runtime with reviewed immutable
-digests. Preserve UID/GID `65532:65532`, `/usr/local/bin/provider` and CA trust support.
+Do not move or reuse release tags. To fix a bad release, publish a new version.
 
-The Dockerfile defaults to Go 1.27.3 and keeps `GOTOOLCHAIN=local`. Set `BUILD_IMAGE`
-to a compatible reviewed builder; an existing variable overrides the Dockerfile
-default and is not updated automatically. For example:
+## One-time repository setup
 
-```text
-docker.io/library/golang:1.27.3-alpine@sha256:d200d2dd76b03a99b52651fd1325aff7dcd35422c35c01bac56571b0507f3deb
-```
+- **Actions:** allow GitHub Actions for the repository. Workflow-level permissions
+  are declared in the file; the repository default can stay read-only.
+- **Package visibility:** the first publish creates a **private** package. To allow
+  anonymous pulls, open the package under **Your profile → Packages →
+  omni-nutanix-pc-infra-provider → Package settings → Change visibility** and choose
+  Public. GitHub does not allow a public package to become private again
+  ([docs](https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility)).
+  Keep it private if needed and use a read-only pull credential
+  (`read:packages`) in the deployment instead.
+- **Tag protection:** add a repository ruleset for tags matching `v*` that
+  restricts creation, update and deletion to maintainers.
 
-The builder's Go version must meet the minimum in `go.mod`. This build toolchain
-does not select or upgrade the Talos version requested by Omni.
+## Updating build inputs
 
-Create a dedicated package-publishing account/token authorized under the repository
-owner, using the smallest supported package read/write scope (typically `write:package`).
-The Actions job token is not the package-publisher credential. Under **Actions → Secrets**:
+The workflow's `BUILD_IMAGE` and `RUNTIME_IMAGE` pin reviewed multi-arch index
+digests. When updating, change tag and digest together. The builder's Go version
+must meet the minimum in `go.mod`; the Dockerfile keeps `GOTOOLCHAIN=local`, so
+the build never downloads a different toolchain. This build toolchain does not
+select or upgrade the Talos version requested by Omni.
 
-| Secret | Meaning |
-| --- | --- |
-| `REGISTRY_USERNAME` | Publisher account login, not the organization name. |
-| `REGISTRY_TOKEN` | Its package-write token, not an administrator token. |
+Preserve UID/GID `65532:65532`, `/usr/local/bin/provider` and CA trust support in
+any replacement runtime image.
 
-Store values in approved secret tooling/Gitea UI, never Git, build arguments or logs.
-Checkout uses the separate job token without persisting credentials in Git config.
-No Omni/Prism credentials, TLS private keys or runner-registration tokens belong here.
+## Local builds
 
-Enable publication and trigger a trusted main/tag push or manual run. A variable
-change alone starts no build. Review Actions output and the owner's Packages page,
-retain the reported digest and deploy separately using your normal change process.
-
-## Runner and Docker access
-
-The job environment needs Linux, Git, Bash, Node.js for the pinned Actions, Python
-3.9+ and a writable Go tool cache. Publication also needs Docker CLI/Engine, BuildKit
-and Buildx supporting `--load`, `--platform`, `--provenance=false` and `--sbom=false`.
-The script uses the daemon's default builder; it provisions no privileged builder.
-
-Provide verified HTTPS access to Gitea/registry, pinned action/toolchain sources, Go
-dependencies and base-image registries. Add public enterprise CAs to both job and
-Docker/BuildKit trust. Never disable TLS verification or make Docker sockets
-world-writable.
-
-Use an isolated daemon per job or serialize a dedicated worker. Docker socket access
-is host-level privilege; do not share a daemon hosting production or unrelated
-services. Protect runners from unreviewed/fork PR code even when no publication
-secrets are supplied. This workflow does not configure signing/SBOM attestations,
-multi-platform publication, retention/pruning or deployment.
-
-For a standard socket on a dedicated build host, the runner must reach its daemon and
-forward it into job containers. Merge this field into the existing runner config:
-
-```yaml
-container:
-  docker_host: "unix:///var/run/docker.sock"
-```
-
-With standard Gitea runners, an empty `docker_host` auto-detects; `"-"` disables
-forwarding. For remote/rootless setups use the actual approved connection and verified
-TLS instead. Do not overwrite runner configuration or expose registration credentials.
-
-## Diagnostics
-
-From the same job environment:
-
-```sh
-python3 scripts/container-ci.py doctor
-```
-
-This checks Docker/Buildx reachability with bounded probes, not a build/login/push.
-Fixed hints cover permissions, API mismatch, TLS, contexts, DNS and timeouts; only
-UID/GID/groups, configured connection flags and socket metadata are reported. Raw
-replies/endpoints/configuration are suppressed. Package credentials cannot fix an
-unreachable Docker daemon. Do not share full Docker/runner/environment dumps.
-
-References: [Gitea registry](https://docs.gitea.com/usage/packages/container/),
-[Actions variables](https://docs.gitea.com/usage/actions/actions-variables/),
-[Actions differences](https://docs.gitea.com/usage/actions/comparison/).
+`make image IMAGE=<name:tag>` builds a single-platform image locally without
+pushing; see [build from source](configuration.md#build-from-source).

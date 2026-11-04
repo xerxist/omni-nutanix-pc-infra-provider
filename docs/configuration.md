@@ -79,7 +79,7 @@ container or deploy the provider. The executable accepts the same runtime settin
 
 `make image IMAGE=<registry/owner/image:tag> BUILD_ARGS='<reviewed build arguments>'`
 is an explicit local container build, not a push/deployment. Pin builder/runtime
-images and use [the Gitea guide](container-ci.md) for publication. Unstamped direct
+images; releases are published by [GitHub Actions](container-ci.md). Unstamped direct
 Go/Docker builds report `dev`.
 
 The module path is

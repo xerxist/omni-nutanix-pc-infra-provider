@@ -1,1 +1,10 @@
 .DS_Store
+
+# Build output
+/_out/
+
+# Private deployment inputs and rendered manifests
+.env
+deployment.env
+runtime.env
+/deploy/rendered/

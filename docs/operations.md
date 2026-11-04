@@ -18,7 +18,8 @@ retention without erasing active/frozen image identities. See
 
 ## Updating the provider
 
-Verify the source revision, image platform and immutable registry digest. Record current
+Take the new digest from the [release notes](https://github.com/xerxist/omni-nutanix-pc-infra-provider/releases)
+and verify its source revision, platform and [provenance](container-ci.md#pull-and-verify). Record current
 configuration and privately snapshot requests, machines and every image journal,
 replacement marker and recovery approval. Prefer an idle deployment for changes.
 
