@@ -118,7 +118,8 @@ with the same ID.
 
 ## 6. Create a MachineClass
 
-Use the Omni form or [the resource example](../deploy/examples/machineclass.yaml).
+Use the Omni form ([illustration](machineclasses.md)) or
+[the resource example](../deploy/examples/machineclass.yaml).
 Minimal automatic-image provider data:
 
 ```yaml

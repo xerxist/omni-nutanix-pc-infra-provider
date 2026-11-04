@@ -5,6 +5,12 @@ data describes a **new allocation**, not a mutable VM specification. Submitted
 creation/image/storage intent is frozen; editing a class does not update existing
 machines. Example resources are in [`deploy/examples/`](../deploy/examples/).
 
+![MachineClass form for the nutanix-pc provider](images/machineclass-form.svg)
+
+*Illustration, not a screenshot: the fields and help text come from the provider's
+[schema](../cmd/omni-infra-provider-nutanix/data/schema.json), filled with the
+quickstart's example values. Layout and styling in your Omni version may differ.*
+
 ## Required sizing and placement
 
 | Field | Meaning |

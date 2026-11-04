@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1912" viewBox="0 0 1280 1912" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>Illustration of the Omni MachineClass form for the nutanix-pc provider</title>
+<rect width="1280" height="1912" fill="#121216"/>
+<rect width="1280" height="56" fill="#121216"/><line x1="0" y1="56" x2="1280" y2="56" stroke="#2c2c33"/>
+<line x1="32" y1="18" x2="32" y2="38" stroke="#fb6e2a" stroke-width="2"/>
+<line x1="35" y1="18" x2="35" y2="38" stroke="#fb6e2a" stroke-width="2"/>
+<line x1="38" y1="18" x2="38" y2="38" stroke="#fb6e2a" stroke-width="2"/>
+<line x1="41" y1="18" x2="41" y2="38" stroke="#fb6e2a" stroke-width="2"/>
+<line x1="44" y1="18" x2="44" y2="38" stroke="#fb6e2a" stroke-width="2"/>
+<line x1="47" y1="18" x2="47" y2="38" stroke="#fb6e2a" stroke-width="2"/>
+<text x="58" y="35" font-size="17" fill="#e8e8ea" font-weight="700" text-anchor="start">SIDERO OMNI</text>
+<text x="1250" y="34" font-size="12" fill="#5f5f68" font-weight="400" text-anchor="end">Illustration — generated from schema.json</text>
+<rect x="0" y="56" width="230" height="1856" fill="#121216"/>
+<line x1="230" y1="56" x2="230" y2="1912" stroke="#2c2c33"/>
+<rect x="30" y="85" width="12" height="12" rx="2" fill="none" stroke="#9a9aa2" stroke-width="1"/>
+<text x="52" y="96" font-size="13" fill="#9a9aa2" font-weight="400" text-anchor="start">Home</text>
+<rect x="30" y="117" width="12" height="12" rx="2" fill="none" stroke="#9a9aa2" stroke-width="1"/>
+<text x="52" y="128" font-size="13" fill="#9a9aa2" font-weight="400" text-anchor="start">Clusters</text>
+<rect x="30" y="149" width="12" height="12" rx="2" fill="none" stroke="#9a9aa2" stroke-width="1"/>
+<text x="52" y="160" font-size="13" fill="#9a9aa2" font-weight="400" text-anchor="start">Machines</text>
+<rect x="30" y="181" width="12" height="12" rx="2" fill="none" stroke="#9a9aa2" stroke-width="1"/>
+<text x="52" y="192" font-size="13" fill="#9a9aa2" font-weight="400" text-anchor="start">Machine Management</text>
+<line x1="42" y1="210" x2="42" y2="230" stroke="#fb6e2a" stroke-width="2"/>
+<rect x="52" y="213" width="12" height="12" rx="2" fill="none" stroke="#e8e8ea" stroke-width="1"/>
+<text x="74" y="224" font-size="13" fill="#e8e8ea" font-weight="600" text-anchor="start">Classes</text>
+<rect x="52" y="245" width="12" height="12" rx="2" fill="none" stroke="#9a9aa2" stroke-width="1"/>
+<text x="74" y="256" font-size="13" fill="#9a9aa2" font-weight="400" text-anchor="start">Join Tokens</text>
+<rect x="52" y="277" width="12" height="12" rx="2" fill="none" stroke="#9a9aa2" stroke-width="1"/>
+<text x="74" y="288" font-size="13" fill="#9a9aa2" font-weight="400" text-anchor="start">Installation Media</text>
+<rect x="30" y="309" width="12" height="12" rx="2" fill="none" stroke="#9a9aa2" stroke-width="1"/>
+<text x="52" y="320" font-size="13" fill="#9a9aa2" font-weight="400" text-anchor="start">Settings</text>
+<rect x="52" y="341" width="12" height="12" rx="2" fill="none" stroke="#9a9aa2" stroke-width="1"/>
+<text x="74" y="352" font-size="13" fill="#9a9aa2" font-weight="400" text-anchor="start">Infra Providers</text>
+<text x="264" y="96" font-size="22" fill="#9a9aa2" font-weight="500" text-anchor="start">Machine Classes</text>
+<text x="436" y="96" font-size="22" fill="#e8e8ea" font-weight="600" text-anchor="start">/ Create Machine Class</text>
+<rect x="264" y="126" width="982" height="150" rx="6" fill="#1a1a1f" stroke="#2c2c33" stroke-width="1"/>
+<text x="284" y="158" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">Name</text>
+<rect x="284" y="168" width="420" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="190" font-size="13" fill="#e8e8ea" font-weight="400" text-anchor="start">nutanix-workers</text>
+<text x="284" y="232" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">Mode</text>
+<rect x="284" y="242" width="120" height="26" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="344" y="260" font-size="12" fill="#9a9aa2" font-weight="500" text-anchor="middle">Manual</text>
+<rect x="410" y="242" width="140" height="26" rx="5" fill="#fb6e2a" stroke="#fb6e2a" stroke-width="1"/>
+<text x="480" y="260" font-size="12" fill="#fff" font-weight="600" text-anchor="middle">Auto Provision</text>
+<rect x="264" y="298" width="982" height="120" rx="6" fill="#1a1a1f" stroke="#2c2c33" stroke-width="1"/>
+<text x="284" y="330" font-size="14" fill="#e8e8ea" font-weight="600" text-anchor="start">Infrastructure Provider</text>
+<rect x="284" y="346" width="320" height="56" rx="6" fill="#1f1f25" stroke="#fb6e2a" stroke-width="1.5"/>
+<text x="352" y="370" font-size="14" fill="#e8e8ea" font-weight="600" text-anchor="start">Nutanix Prism Central</text>
+<text x="352" y="390" font-size="12" fill="#9a9aa2" font-weight="600" text-anchor="start">ID: nutanix-pc</text>
+<rect x="264" y="440" width="982" height="1294" rx="6" fill="#1a1a1f" stroke="#2c2c33" stroke-width="1"/>
+<text x="284" y="470" font-size="14" fill="#e8e8ea" font-weight="600" text-anchor="start">Provider Data</text>
+<text x="284" y="502" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">cpu *</text>
+<rect x="284" y="510" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="532" font-size="13" fill="#e8e8ea" font-weight="400" text-anchor="start">1</text>
+<text x="284" y="562" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">vCPU sockets. Total vCPUs = cpu * cores.</text>
+<text x="767" y="502" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">cores *</text>
+<rect x="767" y="510" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="779" y="532" font-size="13" fill="#e8e8ea" font-weight="400" text-anchor="start">2</text>
+<text x="767" y="562" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Cores per socket.</text>
+<text x="284" y="594" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">memory_mb *</text>
+<rect x="284" y="602" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="624" font-size="13" fill="#e8e8ea" font-weight="400" text-anchor="start">4096</text>
+<text x="284" y="654" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Memory in MiB.</text>
+<text x="767" y="594" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">disk_gb *</text>
+<rect x="767" y="602" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="779" y="624" font-size="13" fill="#e8e8ea" font-weight="400" text-anchor="start">40</text>
+<text x="767" y="654" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Boot disk in GiB; must be at least the Talos image size.</text>
+<text x="284" y="686" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">cluster_name</text>
+<rect x="284" y="694" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="716" font-size="13" fill="#e8e8ea" font-weight="400" text-anchor="start">example-cluster</text>
+<text x="284" y="746" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Target AHV cluster registered with Prism Central.</text>
+<text x="767" y="686" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">cluster_uuid</text>
+<rect x="767" y="694" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="779" y="716" font-size="13" fill="#5f5f68" font-weight="400" text-anchor="start">uuid</text>
+<text x="767" y="746" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Target AHV cluster extId. Preferred over names.</text>
+<text x="284" y="778" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">container_name</text>
+<rect x="284" y="786" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="808" font-size="13" fill="#e8e8ea" font-weight="400" text-anchor="start">example-storage</text>
+<text x="284" y="838" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Storage container name, scoped to the selected cluster.</text>
+<text x="767" y="778" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">container_uuid</text>
+<rect x="767" y="786" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="779" y="808" font-size="13" fill="#5f5f68" font-weight="400" text-anchor="start">uuid</text>
+<text x="767" y="838" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Storage container UUID on the selected cluster.</text>
+<text x="284" y="870" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">subnet_name</text>
+<rect x="284" y="878" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="900" font-size="13" fill="#e8e8ea" font-weight="400" text-anchor="start">example-vlan</text>
+<text x="284" y="930" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">VLAN or overlay subnet. VLAN names are cluster-scoped; overlay names ca…</text>
+<text x="767" y="870" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">subnet_uuid</text>
+<rect x="767" y="878" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="779" y="900" font-size="13" fill="#5f5f68" font-weight="400" text-anchor="start">uuid</text>
+<text x="767" y="930" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Prism Central subnet extId; recommended for advanced networking.</text>
+<text x="284" y="962" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">vpc_name</text>
+<rect x="284" y="970" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="992" font-size="13" fill="#5f5f68" font-weight="400" text-anchor="start"></text>
+<text x="284" y="1022" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">VPC scope for the primary overlay subnet.</text>
+<text x="767" y="962" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">vpc_uuid</text>
+<rect x="767" y="970" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="779" y="992" font-size="13" fill="#5f5f68" font-weight="400" text-anchor="start">uuid</text>
+<text x="767" y="1022" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">VPC extId for the primary overlay subnet.</text>
+<text x="284" y="1054" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">image_name</text>
+<rect x="284" y="1062" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="1084" font-size="13" fill="#5f5f68" font-weight="400" text-anchor="start"></text>
+<text x="284" y="1114" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Existing Talos OpenStack-platform disk image. Leave blank when automati…</text>
+<text x="767" y="1054" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">image_uuid</text>
+<rect x="767" y="1062" width="459" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="779" y="1084" font-size="13" fill="#5f5f68" font-weight="400" text-anchor="start"></text>
+<text x="767" y="1114" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Existing Prism Central DISK_IMAGE extId. Leave blank when automatic ima…</text>
+<rect x="284" y="1141" width="16" height="16" rx="3" fill="#fb6e2a" stroke="#fb6e2a" stroke-width="1"/>
+<path d="M288 1149 l3 3 l6 -7" stroke="#fff" stroke-width="2" fill="none"/>
+<text x="310" y="1154" font-size="13" fill="#e8e8ea" font-weight="600" text-anchor="start">Automatic image import</text>
+<text x="284" y="1176" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Import the requested Talos version/extensions onto the VM's selected AHV cluster only. Requires provider enablement. Clear image_name and image_uuid…</text>
+<text x="284" y="1206" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">Initial Talos extensions</text>
+<rect x="284" y="1216" width="202" height="26" rx="13" fill="#24242b" stroke="#3a3a42" stroke-width="1"/>
+<text x="296" y="1234" font-size="12" fill="#e8e8ea" font-weight="400" text-anchor="start">siderolabs/util-linux-tools</text>
+<rect x="494" y="1216" width="74" height="26" rx="5" fill="none" stroke="#4a4a52" stroke-width="1"/>
+<text x="531" y="1234" font-size="12" fill="#9a9aa2" font-weight="500" text-anchor="middle">+ Add</text>
+<text x="284" y="1262" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Optional official extension names, for example siderolabs/qemu-guest-agent. Requires Automatic image import. Added to Omni's requested extensions, s…</text>
+<text x="284" y="1292" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">categories</text>
+<rect x="284" y="1302" width="74" height="26" rx="5" fill="none" stroke="#4a4a52" stroke-width="1"/>
+<text x="321" y="1320" font-size="12" fill="#9a9aa2" font-weight="500" text-anchor="middle">+ Add</text>
+<text x="284" y="1348" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Existing Prism Central VM categories assigned at creation. Select by uuid or key/value. May activate existing Flow security policies; definitions/po…</text>
+<text x="284" y="1378" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">additional_disks</text>
+<rect x="284" y="1388" width="74" height="26" rx="5" fill="none" stroke="#4a4a52" stroke-width="1"/>
+<text x="321" y="1406" font-size="12" fill="#9a9aa2" font-weight="500" text-anchor="middle">+ Add</text>
+<text x="284" y="1434" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Ephemeral raw disks. Like the boot disk and config drive, any mismatched disks are automatically migrated to container_name/container_uuid before po…</text>
+<text x="284" y="1464" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">gpu</text>
+<rect x="284" y="1474" width="74" height="26" rx="5" fill="none" stroke="#4a4a52" stroke-width="1"/>
+<text x="321" y="1492" font-size="12" fill="#9a9aa2" font-weight="500" text-anchor="middle">+ Add</text>
+<text x="284" y="1520" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Exact physical GPU or vGPU device/profile names in the selected cluster. One name per GPU; repeat a name to request identical GPUs. IDs, vendor and…</text>
+<text x="284" y="1550" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">additional_nics</text>
+<rect x="284" y="1560" width="74" height="26" rx="5" fill="none" stroke="#4a4a52" stroke-width="1"/>
+<text x="321" y="1578" font-size="12" fill="#9a9aa2" font-weight="500" text-anchor="middle">+ Add</text>
+<text x="284" y="1606" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Additional NICs with independent subnet and VPC selectors.</text>
+<text x="284" y="1636" font-size="12" fill="#e8e8ea" font-weight="600" text-anchor="start">description</text>
+<rect x="284" y="1644" width="942" height="34" rx="5" fill="#0f0f12" stroke="#383840" stroke-width="1"/>
+<text x="296" y="1666" font-size="13" fill="#5f5f68" font-weight="400" text-anchor="start"></text>
+<text x="284" y="1696" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Optional literal VM description shown in Prism. Supports multiline text; frozen at creation intent. Changes apply only to new machines, not existing…</text>
+<rect x="264" y="1756" width="982" height="70" rx="6" fill="#1a1a1f" stroke="#2c2c33" stroke-width="1"/>
+<rect x="284" y="1780" width="38" height="20" rx="10" fill="#2a2a31" stroke="#4a4a52" stroke-width="1"/>
+<circle cx="295" cy="1790" r="7" fill="#9a9aa2"/>
+<text x="334" y="1795" font-size="13" fill="#e8e8ea" font-weight="600" text-anchor="start">Tunnel Enabled</text>
+<text x="454" y="1795" font-size="11" fill="#9a9aa2" font-weight="400" text-anchor="start">Enable when Omni uses SideroLink HTTPS tunneling.</text>
+<rect x="906" y="1848" width="120" height="36" rx="5" fill="none" stroke="#4a4a52" stroke-width="1"/>
+<text x="966" y="1871" font-size="13" fill="#e8e8ea" font-weight="500" text-anchor="middle">Cancel</text>
+<rect x="1040" y="1848" width="206" height="36" rx="5" fill="#fb6e2a" stroke="#fb6e2a" stroke-width="1"/>
+<text x="1143" y="1871" font-size="13" fill="#fff" font-weight="600" text-anchor="middle">Create Machine Class</text>
+<svg x="298" y="360" width="40" height="28" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:serif="http://www.serif.com/" version="1.1" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" viewBox="-0.03 0 70.65 48.2">
+    <g>
+        <path id="Fill-1" d="M15.6,47.8C15.4,48 15.2,48.1 14.9,48.1L1.1,48.1C0.7,48.1 0.2,47.9 0.1,47.5C-0.1,47 0,46.5 0.4,46.2L25.5,25C26.1,24.5 26.1,23.7 25.5,23.2L0.4,2C0.1,1.7 -0.1,1.3 0,0.9C0.1,0.4 0.6,0 1.1,0L14.3,0C14.6,0 14.8,0.1 15,0.3L42.3,23.3L42.5,23.5C42.9,23.9 42.9,24.5 42.5,24.9L42.2,25.1L15.6,47.8" style="fill-rule:nonzero;fill: #8bc34a;"/>
+        <path id="Fill-8" d="M46.6,20.2C47,20.6 47.7,20.6 48.1,20.2L70,2C70.3,1.7 70.5,1.3 70.4,1C70.3,0.4 69.8,0 69.3,0L56.1,0C55.8,0 55.6,0.1 55.4,0.3L40,12.8C39.4,13.3 39.4,14.1 40,14.6L46.6,20.2" style="fill-rule:nonzero;fill: #0d47a1;"/>
+        <path id="Fill-9" d="M46.5,28.1C46.9,27.7 47.6,27.7 48,28.1L70.2,46.3C70.5,46.6 70.7,47 70.6,47.3C70.5,47.8 70,48.2 69.5,48.2L56.3,48.2C56,48.2 55.8,48.1 55.6,47.9L40.4,35.3C39.8,34.8 39.8,34 40.4,33.5L46.5,28.1" style="fill-rule:nonzero;fill: #0d47a1;"/>
+    </g>
+</svg>
+</svg>
