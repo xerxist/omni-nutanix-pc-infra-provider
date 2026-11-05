@@ -13,6 +13,17 @@ make build
 ```
 
 The local binary is written to ignored `_out/`; generated protobuf Go is checked in.
+
+Before opening a pull request, run the same checks as CI:
+
+```sh
+go vet ./...
+go test ./...
+go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+```
+
+CI pins the `govulncheck` version in the release workflow and runs these checks
+with the release builder's Go toolchain.
 See [configuration/source builds](docs/configuration.md#build-from-source) and
 [container releases](docs/container-ci.md). Runtime credentials are not build arguments.
 Container publication and deployment are separate from source changes.

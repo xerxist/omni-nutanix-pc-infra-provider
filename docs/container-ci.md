@@ -44,6 +44,11 @@ deploy the digest.
 [`.github/workflows/release.yml`](../.github/workflows/release.yml) never deploys,
 connects to Prism/Omni or allocates machines.
 
+- Every run first runs `go vet`, `go test` and
+  [`govulncheck`](https://go.dev/doc/security/vuln/) inside the pinned builder
+  image, with the source mounted read-only. No image is built or published unless
+  they pass. `govulncheck` fails only on vulnerabilities in code the provider
+  actually calls.
 - Pull requests and `main` pushes build both platforms and smoke-test the amd64
   image (`--help`, `--version`, non-root user) with no network or registry access.
   These builds report version `dev-<commit>`. Nothing is published.
@@ -51,7 +56,8 @@ connects to Prism/Omni or allocates machines.
   binary reports it without the `v`, at build time, with no runtime lookup. The
   tag must point to a commit already on `main`. The job repeats the smoke test,
   then pushes the multi-arch image, attests its digest and creates a GitHub
-  release with the digest and generated notes. Versions containing `-` are marked as prereleases.
+  release with the digest and generated notes. Versions containing `-` are
+  marked as prereleases.
 - Publishing uses the job's short-lived `GITHUB_TOKEN`; no personal token or
   repository secret is required. Each job receives only the permissions it needs.
 - Builder and runtime images and all actions are pinned by digest/commit SHA.
@@ -98,11 +104,11 @@ any replacement runtime image.
 ## Dependency updates
 
 [Renovate](https://docs.renovatebot.com/) ([`renovate.json`](../renovate.json)) opens
-weekly PRs for Go modules, pinned actions and these builder/runtime digests, after a
-3-day minimum release age. The Go builder image and the Dockerfile `GO_VERSION` are
-grouped, as are the Omni/Talos/COSI modules. The `go` directive and `replace`
-directives are left for manual review. Each PR runs the verify job; nothing merges
-automatically.
+weekly PRs for Go modules, pinned actions, `govulncheck` and these builder/runtime
+digests, after a 3-day minimum release age. The Go builder image and the Dockerfile
+`GO_VERSION` are grouped, as are the Omni/Talos/COSI modules. The `go` directive and
+`replace` directives are left for manual review. Each PR runs the checks and the
+verify build; nothing merges automatically.
 
 ## Local builds
 

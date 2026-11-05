@@ -26,6 +26,14 @@
     },
     {
       "customType": "regex",
+      "description": "govulncheck version used by the check job",
+      "managerFilePatterns": ["/^\\.github/workflows/release\\.yml$/"],
+      "matchStrings": ["GOVULNCHECK_VERSION: (?<currentValue>v\\S+)"],
+      "depNameTemplate": "golang.org/x/vuln",
+      "datasourceTemplate": "go"
+    },
+    {
+      "customType": "regex",
       "description": "Dockerfile default Go version for local builds",
       "managerFilePatterns": ["/^Dockerfile$/"],
       "matchStrings": ["ARG GO_VERSION=(?<currentValue>\\S+)"],

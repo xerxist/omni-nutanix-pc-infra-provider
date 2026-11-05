@@ -1,4 +1,5 @@
-# Builds the provider image. Pull requests and main pushes only verify the build;
+# Vets, tests and vulnerability-scans the source, then builds the provider image.
+# Pull requests and main pushes only verify the build;
 # a vMAJOR.MINOR.PATCH tag on main publishes to GHCR and creates a release. The
 # version embedded in the binary is the tag without its leading "v".
 name: Release
@@ -22,10 +23,33 @@ env:
   BUILD_IMAGE: docker.io/library/golang:1.27.3-alpine@sha256:d200d2dd76b03a99b52651fd1325aff7dcd35422c35c01bac56571b0507f3deb
   RUNTIME_IMAGE: gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
   PLATFORMS: linux/amd64,linux/arm64
+  GOVULNCHECK_VERSION: v1.9.0
 
 jobs:
+  # Gates every build and release: runs in the pinned builder image, so checks use
+  # the same Go toolchain as the published binary. The source is mounted read-only.
+  check:
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Vet, test and scan for vulnerabilities
+        run: |
+          docker run --rm -v "$PWD:/src:ro" -w /src \
+            -e CGO_ENABLED=0 -e GOFLAGS=-mod=readonly -e GOTOOLCHAIN=local -e GOVULNCHECK_VERSION \
+            "$BUILD_IMAGE" sh -euc '
+              go vet ./...
+              go test ./...
+              go run "golang.org/x/vuln/cmd/govulncheck@${GOVULNCHECK_VERSION}" ./...
+            '
+
   verify:
     if: github.ref_type != 'tag'
+    needs: check
     runs-on: ubuntu-26.04
     permissions:
       contents: read
@@ -77,6 +101,7 @@ jobs:
 
   publish:
     if: github.ref_type == 'tag'
+    needs: check
     runs-on: ubuntu-26.04
     permissions:
       contents: read
