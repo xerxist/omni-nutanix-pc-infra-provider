@@ -9,11 +9,11 @@ replace go.yaml.in/yaml/v4 => github.com/oguzkilcan/go-yaml/v4 v4.0.0-2026082008
 replace github.com/mdlayher/ethtool => github.com/siderolabs/ethtool v0.6.0-sidero
 
 require (
-	github.com/cosi-project/runtime v1.17.0
+	github.com/cosi-project/runtime v1.17.1
 	github.com/google/uuid v1.6.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.3
 	github.com/siderolabs/image-factory v1.8.0
-	github.com/siderolabs/omni/client v1.13.2
+	github.com/siderolabs/omni/client v1.13.3
 	github.com/siderolabs/talos/pkg/machinery v1.15.0-alpha.2.0.20261028085643-3ba3d6a5e784
 	github.com/spf13/cobra v1.10.2
 	go.uber.org/zap v1.28.0
