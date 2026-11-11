@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Preparation only: pin BUILD_IMAGE and RUNTIME_IMAGE to reviewed digests in CI.
-ARG GO_VERSION=1.27.3
+ARG GO_VERSION=1.27.4
 ARG BUILD_IMAGE=docker.io/golang:${GO_VERSION}-alpine
 ARG RUNTIME_IMAGE=gcr.io/distroless/static-debian12:nonroot
 ARG IMAGE_VERSION=dev
