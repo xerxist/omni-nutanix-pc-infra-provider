@@ -20,7 +20,7 @@ concurrency:
 env:
   # Reviewed multi-arch index digests. Update both tag and digest together; the
   # builder's Go version must satisfy go.mod.
-  BUILD_IMAGE: docker.io/library/golang:1.27.4-alpine@sha256:0a5f7fe796599ff487605987432e7619ae45beeb2fba4c2ce0b907879932aebf
+  BUILD_IMAGE: docker.io/library/golang:1.27.4-alpine@sha256:70bd7ddea8b6cbe5d6943cde279d6b67feb10cc924fb9100d1d8757c1575b280
   RUNTIME_IMAGE: gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
   PLATFORMS: linux/amd64,linux/arm64
   GOVULNCHECK_VERSION: v1.9.0
